@@ -44,19 +44,20 @@ def save_images_to_cluster(clusters):
     for label, cluster_images in clusters.items():
         print(f"Cluster {label+1}:")
         Path(f'./data/{label}').mkdir(parents=True, exist_ok=True)
-        for img_walker, image_path in enumerate(cluster_images):
+        for image_path in cluster_images:
             source_file = image_path # Replace with the path to the source file
-            destination_file = f"./data/{label}/{img_walker}.jpg"  # Replace with the path to the destination file
+            img_fn = Path(source_file).name
+            destination_file = f"./data/{label}/{img_fn}.jpg"  # Replace with the path to the destination file
 
             # Copy the file
             shutil.copyfile(source_file, destination_file)
 
 
 if __name__ == "__main__":
-    img_directory = "./data/sample_images"
+    img_directory = "./data/test_font_images"
     images = preprocess_images(img_directory)
     images_array = convert_images_to_array(images)
-    num_clusters = 5  # Adjust the number of clusters as per your needs
+    num_clusters = 6  # Adjust the number of clusters as per your needs
     kmeans = cluster_images(images_array, num_clusters)
     image_paths = [os.path.join(img_directory, file) for file in os.listdir(img_directory)]
     clusters = get_img_clusters_with_label(kmeans, image_paths)
